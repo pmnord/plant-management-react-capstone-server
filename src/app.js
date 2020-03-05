@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 
 const app = express();
+const authRouter = require('./auth/auth-router.js')
+const userRouter = require('./user/user-router')
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -14,6 +16,14 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
+
+app.get('/', (req, res) => {
+    res.send("Hello boilerplate!")
+})
+
+app.use('/api/auth', authRouter)
+app.use('/api/user', userRouter)
+
 app.use(function errorHandler(error, req, res, next) {
       let response;
       if (NODE_ENV === 'production') {
@@ -25,8 +35,5 @@ app.use(function errorHandler(error, req, res, next) {
       res.status(500).json(response)
     })
 
-app.get('/', (req, res) => {
-    res.send("Hello boilerplate!")
-})
 
 module.exports = app
