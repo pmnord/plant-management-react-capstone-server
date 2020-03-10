@@ -1,0 +1,1 @@
+DROP TABLE fancyplants_plant_instances;
