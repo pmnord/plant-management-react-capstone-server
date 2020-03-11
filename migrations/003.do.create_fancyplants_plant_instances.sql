@@ -3,7 +3,7 @@ CREATE TABLE fancyplants_plant_instances (
     date_created TIMESTAMP DEFAULT now() NOT NULL,
     user_id INTEGER
         REFERENCES fancyplants_users(id) ON DELETE CASCADE NOT NULL,
-    plant_id INTEGER
+    trefle_id INTEGER
         REFERENCES fancyplants_plants(trefle_id) ON DELETE CASCADE NOT NULL,
     note TEXT,
     watered_date timestamp

@@ -6,7 +6,8 @@ const GardenService = {
             .select('*')
             .from('fancyplants_plant_instances')
             .where({ user_id })
-            .rightJoin('fancyplants_plants', 'plant_id', 'trefle_id')
+            .rightJoin('fancyplants_plants', 'fancyplants_plants.trefle_id', 'fancyplants_plant_instances.trefle_id')
+            // You can't have the same name for both columns when doing a join due to ambiguity
     },
     serializePlant(plant) {
         return {
@@ -14,8 +15,33 @@ const GardenService = {
             common_name: plant.common_name,
             image: plant.image,
             watered_date: plant.watered_date,
+            trefle_id: plant.trefle_id,
             note: xss(plant.note),
         }
+    },
+    getPlantByTrefleId(db, trefle_id) {
+        return db
+            .from('fancyplants_plants')
+            .where({ trefle_id })
+            .first()
+    },
+    insertPlant(db, plant) {
+        return db
+            .into('fancyplants_plants')
+            .insert(plant)
+            .returning('*')
+            .then(rows => {
+                return rows[0];
+            })
+    },
+    insertPlantInstance(db, plantInstance) {
+        return db
+            .into('fancyplants_plant_instances')
+            .insert(plantInstance)
+            .returning('*')
+            .then(rows => {
+                return rows[0];
+            })
     }
 }
 

@@ -9,6 +9,7 @@ const app = express();
 const authRouter = require('./auth/auth-router.js')
 const userRouter = require('./user/user-router')
 const gardenRouter = require('./garden/garden-router')
+const plantRouter = require('./plant/plant-router')
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/garden', gardenRouter)
+app.use('/api/plant', plantRouter)
 
 app.use(function errorHandler(error, req, res, next) {
       let response;

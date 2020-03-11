@@ -14,7 +14,7 @@ INSERT INTO fancyplants_plants (id, trefle_id, scientific_name, common_name, ima
     VALUES
     ( 1, 157554, 'Monstera deliciosa', 'tarovine', 'https://upload.wikimedia.org/wikipedia/commons/0/04/Monstera_deliciosa3.jpg' );
 
-INSERT INTO fancyplants_plant_instances (user_id, plant_id, note)
+INSERT INTO fancyplants_plant_instances (user_id, trefle_id, note)
     VALUES
     ( 1, 157554, 'This is a test note' );
 
