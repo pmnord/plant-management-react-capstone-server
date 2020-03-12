@@ -21,6 +21,7 @@ PlantRouter
                     ? res.status(200).json(data)
                     : res.status(404).json({ error: `No results found` })
             )
+            .catch(next)
     })
 
 PlantRouter

@@ -3,14 +3,26 @@ const xss = require('xss')
 const GardenService = {
     getUserPlants(db, user_id) {
         return db
-            .select('*')
             .from('fancyplants_plant_instances')
+            .select(
+                'fancyplants_plant_instances.id AS instance_id',
+                'fancyplants_plant_instances.date_created',
+                'fancyplants_plant_instances.user_id',
+                'fancyplants_plant_instances.note',
+                'fancyplants_plant_instances.watered_date',
+                'fancyplants_plants.id AS plant_id',
+                'fancyplants_plants.trefle_id',
+                'fancyplants_plants.scientific_name',
+                'fancyplants_plants.common_name',
+                'fancyplants_plants.image'
+            )
             .where({ user_id })
-            .rightJoin('fancyplants_plants', 'fancyplants_plants.trefle_id', 'fancyplants_plant_instances.trefle_id')
+            .rightJoin('fancyplants_plants', 'fancyplants_plant_instances.trefle_id', 'fancyplants_plants.trefle_id')
             // You can't have the same name for both columns when doing a join due to ambiguity
     },
     serializePlant(plant) {
         return {
+            instance_id: plant.instance_id,
             scientific_name: plant.scientific_name,
             common_name: plant.common_name,
             image: plant.image,
@@ -31,7 +43,7 @@ const GardenService = {
             .insert(plant)
             .returning('*')
             .then(rows => {
-                return rows[0];
+                return rows[0]
             })
     },
     insertPlantInstance(db, plantInstance) {
@@ -40,9 +52,15 @@ const GardenService = {
             .insert(plantInstance)
             .returning('*')
             .then(rows => {
-                return rows[0];
+                return rows[0]
             })
+    },
+    deletePlant(db, id) {
+        return db
+            .from('fancyplants_plant_instances')
+            .where({ id })
+            .delete()
     }
 }
 
-module.exports = GardenService;
+module.exports = GardenService
