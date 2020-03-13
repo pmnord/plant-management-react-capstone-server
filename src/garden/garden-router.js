@@ -16,13 +16,27 @@ GardenRouter
             req.user.id
         )
             .then(plants => {
-                const serializedPlants = plants.map(plant => GardenService.serializePlant(plant))
+                const serializedPlants = plants.map(plant => GardenService.serializePlantInstance(plant))
                 res.status(200).json(serializedPlants)
             })
             .catch(next)
     })
     .post(requireAuth, jsonBodyParser, (req, res, next) => {
-        const { trefle_id, scientific_name, common_name, image } = req.body
+        console.log(req.body)
+        const { trefle_id, 
+                scientific_name, 
+                common_name, 
+                plant_class,
+                plant_order,
+                family,
+                family_common_name,
+                genus,
+                duration,
+                shade_tolerance,
+                drought_tolerance,
+                flower_color,
+                image } = req.body
+        
         const user_id = req.user.id
 
         for (const value of ['trefle_id', 'scientific_name']) {
@@ -31,7 +45,7 @@ GardenRouter
             }
         }
 
-        GardenService.getPlantByTrefleId(
+        GardenService.checkPlantExistsInDb(
             req.app.get('db'),
             trefle_id
         )
@@ -48,16 +62,26 @@ GardenRouter
                             )
                             .then(trefleResData => {
                                 console.log(trefleResData)
-                                let trefleImage = ''
+                                let trefleImage = 'https://upload.wikimedia.org/wikipedia/commons/5/53/Alnus_cordata_leaf_illustration.jpg'
                                 if (trefleResData.images[0]) {
                                     trefleImage = trefleResData.images[0].url
                                 }
                                 console.log(trefleImage)
+
                                 const newPlant = { 
                                     trefle_id,
                                     scientific_name, 
                                     common_name, 
                                     image: trefleImage,
+                                    plant_class: trefleResData.class.name,
+                                    plant_order: trefleResData.order.name,
+                                    family: trefleResData.family.name,
+                                    family_common_name: trefleResData.family_common_name,
+                                    genus: trefleResData.genus.name,
+                                    duration: trefleResData.duration,
+                                    shade_tolerance: trefleResData.main_species.growth.shade_tolerance,
+                                    drought_tolerance: trefleResData.main_species.growth.drought_tolerance,
+                                    flower_color: trefleResData.main_species.flower.color,
                                 }
                                 console.log(newPlant)
 
@@ -85,7 +109,20 @@ GardenRouter
                             .catch(next)
                     } else {
 
-                        const newPlant = { trefle_id, scientific_name, common_name, image }
+                        const newPlant = { 
+                            trefle_id, 
+                            scientific_name, 
+                            common_name, 
+                            plant_class,
+                            plant_order,
+                            family,
+                            family_common_name,
+                            genus,
+                            duration,
+                            shade_tolerance,
+                            drought_tolerance,
+                            flower_color,
+                            image }
     
                         return GardenService.insertPlant(
                             req.app.get('db'),
@@ -106,6 +143,19 @@ GardenRouter
                                     })
                             })
                     }
+                } else {
+                    const newPlantInstance = {
+                        user_id,
+                        trefle_id,
+                    }
+
+                    return GardenService.insertPlantInstance(// use GardenService to insert the new plant instance
+                        req.app.get('db'),
+                        newPlantInstance
+                    )
+                        .then(plantInstance => {
+                            return res.status(201).json(`Created plant ${plantInstance.trefle_id} at user ${plantInstance.user_id}`)
+                        })
                 }
             })
             .catch(next)

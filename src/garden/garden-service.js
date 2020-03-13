@@ -20,7 +20,7 @@ const GardenService = {
             .rightJoin('fancyplants_plants', 'fancyplants_plant_instances.trefle_id', 'fancyplants_plants.trefle_id')
             // You can't have the same name for both columns when doing a join due to ambiguity
     },
-    serializePlant(plant) {
+    serializePlantInstance(plant) {
         return {
             instance_id: plant.instance_id,
             scientific_name: plant.scientific_name,
@@ -31,7 +31,7 @@ const GardenService = {
             note: xss(plant.note),
         }
     },
-    getPlantByTrefleId(db, trefle_id) {
+    checkPlantExistsInDb(db, trefle_id) {
         return db
             .from('fancyplants_plants')
             .where({ trefle_id })

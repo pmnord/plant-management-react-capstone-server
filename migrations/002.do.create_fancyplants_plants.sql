@@ -3,5 +3,14 @@ CREATE TABLE fancyplants_plants (
     trefle_id INTEGER UNIQUE NOT NULL,
     scientific_name TEXT NOT NULL,
     common_name TEXT,
-    image TEXT
+    image TEXT,
+    plant_class TEXT,
+    plant_order TEXT,
+    family TEXT,
+    family_common_name TEXT,
+    genus TEXT,
+    duration TEXT,
+    shade_tolerance TEXT,
+    drought_tolerance TEXT,
+    flower_color TEXT
 );

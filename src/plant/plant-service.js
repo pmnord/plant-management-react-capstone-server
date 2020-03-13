@@ -1,18 +1,11 @@
-const fetch = require('node-fetch')
-const config = require('../config')
 
 const PlantService = {
-    getPlantsFromDb(db, name) {
-
-    },
-    getPlantsFromTrefle(name) {
-
-    },
-    getPlantByIdFromDb(db, name) {
-
-    },
-    getPlantByIdFromTrefle(name) {
-
+    getPlantFromDb(db, trefle_id) {
+        return db
+            .from('fancyplants_plants')
+            .select('*')
+            .where({ trefle_id })
+            .first()
     },
 }
 
