@@ -18,29 +18,24 @@ describe('Auth Endpoints', () => {
 
         app.set('db', db)
     })
-    before('clean the tables', () => {
-        return db
-        .from('fancyplants_users')
-        .truncate()
-    })
+
+    before('clean the tables', () => TestHelpers.truncateDbTables(db))
+
     after('destroy the db instance', () => db.destroy())
 
     beforeEach('seed the users table', () => {
         return db
-        .into('fancyplants_users')
-        .insert(testUsers)
-    })
-    afterEach('clean the tables', () => {
-        return db
-        .from('fancyplants_users')
-        .truncate()
+            .into('fancyplants_users')
+            .insert(testUsers)
     })
 
+    afterEach('clean the tables', () => TestHelpers.truncateDbTables(db))
+
     describe('POST /api/auth/login', () => {
-        it(`responds 400 'Invalid request' when no credentials are sent`, () => {
+        it(`responds 400 Missing required field 'username' when no credentials are sent`, () => {
             return supertest(app)
                 .post(`/api/auth/login`)
-                .expect(400, { error: `Invalid request` })
+                .expect(400, { error: `Missing required field 'username'` })
         })
         it(`responds 400 'Invalid username or password' when no user is found`, () => {
             return supertest(app)
@@ -56,7 +51,7 @@ describe('Auth Endpoints', () => {
             const expectedToken = jwt.sign(
                 { username: credentials.username }, // Payload
                 config.JWT_SECRET,                  // Secret
-                {                                   // Headers?
+                {                                   // Headers
                     subject: credentials.username,
                     algorithm: 'HS256',
                 }
@@ -64,7 +59,8 @@ describe('Auth Endpoints', () => {
             return supertest(app)
                 .post(`/api/auth/login`)
                 .send(credentials)
-                .expect(200, {authToken: expectedToken})
+                .expect(200, { authToken: expectedToken })
+                .then(arg => console.log(arg.body))
         })
     })
 })

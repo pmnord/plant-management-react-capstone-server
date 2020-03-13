@@ -17,7 +17,7 @@ GardenRouter
         )
             .then(plants => {
                 const serializedPlants = plants.map(plant => GardenService.serializePlantInstance(plant))
-                res.status(200).json(serializedPlants)
+                return res.status(200).json(serializedPlants)
             })
             .catch(next)
     })
@@ -100,7 +100,7 @@ GardenRouter
                                         newPlantInstance
                                     )
                                         .then(plantInstance => {
-                                            return res.status(201).json(`Created plant ${plantInstance.trefle_id} at user ${plantInstance.user_id}`)
+                                            return res.status(201).json(plantInstance)
                                         })
                                 })
 
@@ -139,7 +139,7 @@ GardenRouter
                                     newPlantInstance
                                 )
                                     .then(plantInstance => {
-                                        return res.status(201).json(`Created plant ${plantInstance.trefle_id} at user ${plantInstance.user_id}`)
+                                        return res.status(201).json(plantInstance)
                                     })
                             })
                     }
@@ -162,16 +162,26 @@ GardenRouter
     })
 
 GardenRouter
-    .route('/:plant_id')
-    .patch(requireAuth, (req, res, next) => {
+    .route('/:plant_instance_id')
+    .patch(requireAuth, jsonBodyParser, (req, res, next) => {
+        const { note, watered_date } = req.body
+        const updateValues = { note, watered_date }
+        console.log(updateValues)
 
+        GardenService.updatePlantInstance(
+            req.app.get('db'),
+            req.params.plant_instance_id,
+            updateValues
+        )
+        .then(() => res.status(204).end())
+        .catch(next)
     })
     .delete(requireAuth, (req, res, next) => {
-        const { plant_id } = req.params
+        const { plant_instance_id } = req.params
 
-        GardenService.deletePlant(
+        GardenService.deletePlantInstance(
             req.app.get('db'),
-            plant_id
+            plant_instance_id
         )
             .then(() => res.status(204).end())
             .catch(next)

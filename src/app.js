@@ -23,6 +23,10 @@ app.use(
   })
 );
 
+app.get('/', (req, res) => {
+  return res.status(200).end()
+})
+
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/garden', gardenRouter)

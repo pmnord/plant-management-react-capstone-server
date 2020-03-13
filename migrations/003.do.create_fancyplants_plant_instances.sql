@@ -6,5 +6,5 @@ CREATE TABLE fancyplants_plant_instances (
     trefle_id INTEGER
         REFERENCES fancyplants_plants(trefle_id) ON DELETE CASCADE NOT NULL,
     note TEXT,
-    watered_date timestamp
+    watered_date TEXT
 );

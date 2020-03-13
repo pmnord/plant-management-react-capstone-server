@@ -55,11 +55,17 @@ const GardenService = {
                 return rows[0]
             })
     },
-    deletePlant(db, id) {
+    deletePlantInstance(db, id) {
         return db
             .from('fancyplants_plant_instances')
             .where({ id })
             .delete()
+    },
+    updatePlantInstance(db, id, updateValues) {
+        return db
+            .from('fancyplants_plant_instances')
+            .where({ id })
+            .update(updateValues)
     }
 }
 
