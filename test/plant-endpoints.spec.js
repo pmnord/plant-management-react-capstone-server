@@ -2,7 +2,7 @@ const app = require('../src/app')
 const knex = require('knex')
 const TestHelpers = require('./test-helpers')
 
-describe.only('Auth Endpoints', () => {
+describe('Plant Endpoints', () => {
     let db;
 
     before('create the db instance', () => {

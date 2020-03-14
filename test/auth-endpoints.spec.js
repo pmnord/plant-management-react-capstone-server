@@ -60,7 +60,6 @@ describe('Auth Endpoints', () => {
                 .post(`/api/auth/login`)
                 .send(credentials)
                 .expect(200, { authToken: expectedToken })
-                .then(arg => console.log(arg.body))
         })
     })
 })

@@ -22,7 +22,6 @@ GardenRouter
             .catch(next)
     })
     .post(requireAuth, jsonBodyParser, (req, res, next) => {
-        console.log(req.body)
         const { trefle_id, 
                 scientific_name, 
                 common_name, 
@@ -52,7 +51,6 @@ GardenRouter
             .then(dbPlant => {
                 if (!dbPlant) {
                     if (!image) {
-                        console.log('oh no, no image!')
 
                         return fetch(`https://trefle.io/api/plants/${trefle_id}?token=${config.TREFLE_API_KEY}`)
                             .then(trefleRes =>
@@ -61,12 +59,10 @@ GardenRouter
                                     : trefleRes.json()
                             )
                             .then(trefleResData => {
-                                console.log(trefleResData)
                                 let trefleImage = 'https://upload.wikimedia.org/wikipedia/commons/5/53/Alnus_cordata_leaf_illustration.jpg'
                                 if (trefleResData.images[0]) {
                                     trefleImage = trefleResData.images[0].url
                                 }
-                                console.log(trefleImage)
 
                                 const newPlant = { 
                                     trefle_id,
@@ -83,7 +79,6 @@ GardenRouter
                                     drought_tolerance: trefleResData.main_species.growth.drought_tolerance,
                                     flower_color: trefleResData.main_species.flower.color,
                                 }
-                                console.log(newPlant)
 
                                 return GardenService.insertPlant(
                                     req.app.get('db'),
@@ -166,7 +161,6 @@ GardenRouter
     .patch(requireAuth, jsonBodyParser, (req, res, next) => {
         const { note, watered_date } = req.body
         const updateValues = { note, watered_date }
-        console.log(updateValues)
 
         GardenService.updatePlantInstance(
             req.app.get('db'),
