@@ -69,9 +69,15 @@ GardenRouter
                                     scientific_name, 
                                     common_name, 
                                     image: trefleImage,
-                                    plant_class: trefleResData.class.name,
-                                    plant_order: trefleResData.order.name,
-                                    family: trefleResData.family.name,
+                                    plant_class: trefleResData.class
+                                        ? trefleResData.class.name
+                                        : null,
+                                    plant_order: trefleResData.order
+                                        ? trefleResData.order.name
+                                        : null,
+                                    family: trefleResData.family
+                                        ? trefleResData.family.name
+                                        : null,
                                     family_common_name: trefleResData.family_common_name,
                                     genus: trefleResData.genus.name,
                                     duration: trefleResData.duration,
