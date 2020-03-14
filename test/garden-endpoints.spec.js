@@ -44,8 +44,6 @@ describe('Garden Endpoints', () => {
 
     after('destroy the db instance', () => db.destroy())
 
-
-
     afterEach('clean the tables', () => TestHelpers.truncateDbTables(db))
 
     describe(`GET /garden`, () => {
@@ -159,7 +157,7 @@ describe('Garden Endpoints', () => {
         })
     })
 
-    describe.only(`PATCH /garden/:plant_instance_id`, () => {
+    describe(`PATCH /garden/:plant_instance_id`, () => {
         beforeEach('seed the tables', () => TestHelpers.seedDbTables(db, testUsers, testPlants, testPlantInstances))
 
         it(`respods 204 and updates the plant instance in the database`, () => {
