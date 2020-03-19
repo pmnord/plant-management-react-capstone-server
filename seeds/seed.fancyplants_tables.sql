@@ -8,7 +8,7 @@ TRUNCATE
 
 INSERT INTO fancyplants_users ( username, email, password)
     VALUES
-    ( 'test', 'test-email', '$2a$12$yWmO1coIMF5SD0hMYI3aL.ZDK4S.cgiRoviJao5zU1VbjSxgLjU9u' );
+    ( 'demo', 'demo-email', '$2a$12$yWmO1coIMF5SD0hMYI3aL.ZDK4S.cgiRoviJao5zU1VbjSxgLjU9u' );
 
 INSERT INTO fancyplants_plants (
             trefle_id, 
@@ -28,7 +28,7 @@ INSERT INTO fancyplants_plants (
     VALUES ( 
             157554, 
             'Monstera deliciosa', 
-            'tarovine', 
+            'Tarovine', 
             'https://upload.wikimedia.org/wikipedia/commons/0/04/Monstera_deliciosa3.jpg',
             'Liliopsida',
             'Arales',
@@ -39,10 +39,44 @@ INSERT INTO fancyplants_plants (
             NULL,
             NULL,
             NULL
-    );
+    ),
+    ( 
+            171306, 
+            'Prunus fasciculata', 
+            'Desert almond', 
+            'https://upload.wikimedia.org/wikipedia/commons/3/38/Prunus_fasciculata_8.jpg',
+            'Magnoliopsida',
+            'Rosales',
+            'Rosaceae',
+            'Rose family',
+            'Prunus',
+            'Perennial',
+            'Intolerant',
+            'High',
+            'White'
+    ),
+    ( 
+            142925, 
+            'Hierochloe', 
+            'Sweetgrass', 
+            'https://upload.wikimedia.org/wikipedia/commons/3/38/Hierochloe_odorata_kz.jpg',
+            NULL,
+            NULL,
+            NULL,
+            'Grass family',
+            'Hierochloe',
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    )
+;
 
 INSERT INTO fancyplants_plant_instances (user_id, trefle_id, note)
     VALUES
-    ( 1, 157554, 'This is a test note' );
+    ( 1, 157554, null ),
+    ( 1, 171306, null ),
+    ( 1, 142925, null )
+;
 
 COMMIT;
