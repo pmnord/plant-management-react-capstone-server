@@ -35,11 +35,13 @@ describe('Auth Endpoints', () => {
         it(`responds 400 Missing required field 'username' when no credentials are sent`, () => {
             return supertest(app)
                 .post(`/api/auth/login`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .expect(400, { error: `Missing required field 'username'` })
         })
         it(`responds 400 'Invalid username or password' when no user is found`, () => {
             return supertest(app)
                 .post(`/api/auth/login`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .send(testUser)
                 .expect(400, { error: `Invalid username or password` })
         })
@@ -58,6 +60,7 @@ describe('Auth Endpoints', () => {
             )
             return supertest(app)
                 .post(`/api/auth/login`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .send(credentials)
                 .expect(200, { authToken: expectedToken })
         })

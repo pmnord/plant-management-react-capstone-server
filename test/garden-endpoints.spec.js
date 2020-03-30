@@ -1,6 +1,7 @@
-const app = require('../src/app')
-const knex = require('knex')
-const TestHelpers = require('./test-helpers')
+const app = require('../src/app');
+const knex = require('knex');
+const TestHelpers = require('./test-helpers');
+const config = require('../src/config');
 
 describe('Garden Endpoints', () => {
     let db;
@@ -51,6 +52,7 @@ describe('Garden Endpoints', () => {
             it(`responds 400 and error: Invalid bearer token`, () => {
                 return supertest(app)
                     .get('/api/garden/')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .expect(400, { error: "Invalid bearer token" })
             })
         })
@@ -59,6 +61,7 @@ describe('Garden Endpoints', () => {
             it(`responds 401 and error: Unauthorized request`, () => {
                 return supertest(app)
                     .get('/api/garden/')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer foo')
                     .expect(401, { error: 'Unauthorized request' })
             })
@@ -71,6 +74,7 @@ describe('Garden Endpoints', () => {
             it(`responds 200 and the expected user plants array`, () => {
                 return supertest(app)
                     .get('/api/garden/')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                     .expect(200, [{
                         "instance_id": 1,
@@ -90,6 +94,7 @@ describe('Garden Endpoints', () => {
             it(`responds 400 and error: Invalid bearer token`, () => {
                 return supertest(app)
                     .post('/api/garden/')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .expect(400, { error: "Invalid bearer token" })
             })
         })
@@ -98,6 +103,7 @@ describe('Garden Endpoints', () => {
             it(`responds 401 and error: Unauthorized request`, () => {
                 return supertest(app)
                     .post('/api/garden/')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer foo')
                     .expect(401, { error: 'Unauthorized request' })
             })
@@ -109,6 +115,7 @@ describe('Garden Endpoints', () => {
             it(`responds 201`, () => {
                 return supertest(app)
                     .post('/api/garden')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                     .send({
                         "user_id": "1",
@@ -127,6 +134,7 @@ describe('Garden Endpoints', () => {
             it(`responds 201`, () => {
                 return supertest(app)
                     .post('/api/garden')
+                    .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                     .send({
                         "user_id": "1",
@@ -146,6 +154,7 @@ describe('Garden Endpoints', () => {
         it(`responds 204 and deletes a plant instance`, () => {
             return supertest(app)
                 .delete(`/api/garden/1`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                 .expect(204)
                 .then(() => {
@@ -163,12 +172,14 @@ describe('Garden Endpoints', () => {
         it(`respods 204 and updates the plant instance in the database`, () => {
             return supertest(app)
                 .patch(`/api/garden/1`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                 .send({ watered_date: 'March 13th 8:03 pm' })
                 .expect(204)
                 .then(() => {
                     return supertest(app)
                         .get(`/api/garden`)
+                        .set('api-key', config.FANCYPLANTS_API_KEY)
                         .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                         .expect(200, [{
                             "instance_id": 1,

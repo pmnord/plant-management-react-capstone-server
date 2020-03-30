@@ -1,6 +1,7 @@
-const app = require('../src/app')
-const knex = require('knex')
-const TestHelpers = require('./test-helpers')
+const app = require('../src/app');
+const knex = require('knex');
+const TestHelpers = require('./test-helpers');
+const config = require('../src/config');
 
 describe('Plant Endpoints', () => {
     let db;
@@ -24,6 +25,7 @@ describe('Plant Endpoints', () => {
         it('returns 200 and the expected array of plants', () => {
             return supertest(app)
                 .get(`/api/plant?q=Prunus_tenella`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .expect(200, [
                     {
                         "slug": "prunus-tenella",
@@ -41,6 +43,7 @@ describe('Plant Endpoints', () => {
         it('returns 200 and the expected plant from trefle', () => {
             return supertest(app)
                 .get(`/api/plant/171403`)
+                .set('api-key', config.FANCYPLANTS_API_KEY)
                 .expect(200, {
                     "varieties": [],
                     "sub_species": [],
