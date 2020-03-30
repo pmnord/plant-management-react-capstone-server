@@ -1,7 +1,6 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const config = require('../config')
-const PlantService = require('./plant-service')
 
 const PlantRouter = express.Router()
 
@@ -30,23 +29,13 @@ PlantRouter
     .get((req, res, next) => {
         const trefle_id = req.params.trefle_id;
 
-/* ------------ Implement database first check at a later date ----------- */
-/* ------ Need to find a way to store all plant images in the database ------ */
-/* ---------- Need to normalize data being sent to the client when we call from Trefle ---------- */
-
-        // return PlantService.getPlantFromDb(
-        //     req.app.get('db'),
-        //     trefle_id
-        // )
-        // .then(plant => res.send(plant))
-
         return fetch(`https://trefle.io/api/plants/${trefle_id}?token=${config.TREFLE_API_KEY}`)
             .then(trefleRes =>
                 trefleRes.ok
                     ? trefleRes.json().then(data => res.status(200).json(data))
                     : res.status(404).json({ error: `Failed to retrieve that plant` })
             )
-            .catch(next)
+            .catch(next);
     })
 
 module.exports = PlantRouter;
