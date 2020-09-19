@@ -22,9 +22,10 @@ app.use(
       origin: CLIENT_ORIGIN
   })
 )
+
 app.use((req, res, next) => {
   const apiKey = req.get('api-key')
-  console.log(apiKey)
+  
   if (!apiKey) {return res.status(400).json({error: 'This server requires an API key'})}
   if (apiKey != process.env.FANCYPLANTS_API_KEY) {return res.status(401).json({error: 'Invalid API key'})}
   return next()

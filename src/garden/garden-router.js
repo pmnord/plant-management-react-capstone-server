@@ -1,11 +1,11 @@
-const express = require('express')
-const requireAuth = require('../middleware/require-auth.js')
-const GardenService = require('./garden-service')
-const fetch = require('node-fetch')
-const config = require('../config')
+const express = require('express');
+const requireAuth = require('../middleware/require-auth.js');
+const GardenService = require('./garden-service');
+const fetch = require('node-fetch');
+const config = require('../config');
 
-const jsonBodyParser = express.json()
-const GardenRouter = express.Router()
+const jsonBodyParser = express.json();
+const GardenRouter = express.Router();
 
 GardenRouter
     .route('/')
