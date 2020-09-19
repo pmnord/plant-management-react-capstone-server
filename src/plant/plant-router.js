@@ -11,7 +11,7 @@ PlantRouter.route("/").get((req, res, next) => {
   }
 
   return fetch(
-    `https://trefle.io/api/v1/plants?q=${query}&token=${config.TREFLE_API_KEY}`
+    `https://trefle.io/api/v1/plants/search?token=${config.TREFLE_API_KEY}&q=${query}`
   )
     .then((trefleRes) => {
       if (trefleRes.ok) {
