@@ -6,9 +6,9 @@ const userRouter = express.Router()
 
 userRouter
     .post('/', jsonBodyParser, (req, res, next) => {
-        const { username, email, password } = req.body
+        const { username, password } = req.body
 
-        for (const value of ['username', 'email', 'password']) {
+        for (const value of ['username', 'password']) {
             if (!value) res.status(400).json({ error: `Missing required paramater: '${value}'`})
         }
 
@@ -28,7 +28,7 @@ userRouter
                     .then(hashedPassword => {
                         const newUser = {
                             username,
-                            email,
+                            email: '',
                             password: hashedPassword,
                         }
 

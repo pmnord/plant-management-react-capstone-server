@@ -6,15 +6,15 @@ const config = require('../src/config');
 describe('Garden Endpoints', () => {
     let db;
 
-    const testUsers = TestHelpers.makeTestUsers()
-    const testUser = testUsers[0]
+    const testUsers = TestHelpers.makeTestUsers();
+    const testUser = testUsers[0];
     const testPlantInstances = [{
         "id": 1,
         "user_id": 1,
         "watered_date": null,
         "trefle_id": 157554,
         "note": "This is a test note"
-    }]
+    }];
     const testPlants = [{
         "id": 1,
         "trefle_id": 157554,
@@ -30,22 +30,18 @@ describe('Garden Endpoints', () => {
         "shade_tolerance": null,
         "drought_tolerance": null,
         "flower_color": null
-    }]
+    }];
 
     before('create the db instance', () => {
         db = knex({
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL
-        })
-
-        app.set('db', db)
-    })
-
-    before('clean the tables', () => TestHelpers.truncateDbTables(db))
-
-    after('destroy the db instance', () => db.destroy())
-
-    afterEach('clean the tables', () => TestHelpers.truncateDbTables(db))
+        });
+        app.set('db', db);
+    });
+    before('clean the tables', () => TestHelpers.truncateDbTables(db));
+    after('destroy the db instance', () => db.destroy());
+    afterEach('clean the tables', () => TestHelpers.truncateDbTables(db));
 
     describe(`GET /garden`, () => {
         context(`No credentials sent`, () => {
@@ -73,7 +69,7 @@ describe('Garden Endpoints', () => {
 
             it(`responds 200 and the expected user plants array`, () => {
                 return supertest(app)
-                    .get('/api/garden/')
+                    .get('/api/garden')
                     .set('api-key', config.FANCYPLANTS_API_KEY)
                     .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlci0xIiwiaWF0IjoxNTg0MTEzNjAyLCJzdWIiOiJ0ZXN0LXVzZXItMSJ9.p8hCF5K6gPgvjGhq0VfbGJRKlDfI7W4WweHqxYCWowU')
                     .expect(200, [{
@@ -148,7 +144,7 @@ describe('Garden Endpoints', () => {
         })
     })
 
-    describe('DELETE /garden/:plant_instance_id', () => {
+    describe.only('DELETE /garden/:plant_instance_id', () => {
         beforeEach('seed the tables', () => TestHelpers.seedDbTables(db, testUsers, testPlants, testPlantInstances))
 
         it(`responds 204 and deletes a plant instance`, () => {
